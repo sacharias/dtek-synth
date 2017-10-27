@@ -28,6 +28,7 @@ timstr:	.ascii "hello"
 
 .global delay
 .global time2string
+.global enable_interrupt
 
 hexasc:
 	andi	$a0, $a0, 0xF
@@ -83,6 +84,10 @@ for:	addi $s1, $zero, 0
 	nop
 
 
+enable_interrupt:
+   ei
+   jr $ra
+ 	 nop
 
 time2string:
 	PUSH $ra
