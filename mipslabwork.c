@@ -1,14 +1,9 @@
 #include <stdint.h>  /* Declarations of uint_32 and the like */
 #include <pic32mx.h> /* Declarations of system-specific addresses etc */
 #include "mipslab.h" /* Declatations for these labs */
+#include "generateSound.h"
+
 #define PI 3.14159265358979323846
-
-double count = 0.0;
-int debug_value = 0;
-int sample = 0;
-
-//int duration = 41109;
-int duration = 20555;
 
 int waveA[93];
 int waveG[105];
@@ -16,17 +11,68 @@ int waveF[118];
 int waveE[125];
 int waveD[140];
 
-double sin(double x)
-{
-  int n = 1;
-  double sin = x, t = x;
-  while (!(t >= -0.0000000001 && t <= 0.000000001))
-  {
-    t = (-t) * (x * x) / ((2 * n + 1) * (2 * n));
-    sin = sin + t;
-    n++;
-  }
-  return sin;
+double count = 0.0;
+int debug_value = 0;
+int sample = 0;
+int sampleMax = 411090;
+
+//int duration = 41109;
+
+// Get all buttons
+// int getBoardButtons() {
+//   int portD = PORTD >> 5;
+//   portD &= 0x7;
+//   return portD;
+// }
+
+// Connect to 34 on chipkit
+void setupPlayButtons() {
+  TRISDSET = 0xFFFF; // Sätter första till input
+  TRISFSET = 0x8; // prova med 8
+}
+
+int* getPlayButtons() {
+  // Pin 5
+  int playButton1 = PORTD >> 1;
+  playButton1 &= 0x1;
+
+  // Pin 6
+  int playButton2 = PORTD >> 2;
+  playButton2 &= 0x1;
+
+  // Pin 7
+  int playButton3 = PORTD >> 9;
+  playButton3 &= 0x1;
+
+  // Pin 8
+  int playButton4 = PORTD >> 10;
+  playButton4 &= 0x1;
+
+  // Pin 9
+  int playButton5 = PORTD >> 3;
+  playButton5 &= 0x1;
+
+  // Pin 2
+  int playButton6 = PORTD >> 8;
+  playButton6 &= 0x1;
+
+  // Fungerar inte än
+  // Pin 1
+  // int playButton7 = PORTF >> 2;
+  // playButton7 &= 0x1;
+  int playButton7 = 0;
+
+
+  int playButtonsValue = 0;
+  playButtonsValue = playButton1 << 6 ;
+  playButtonsValue |= playButton2 << 5;
+  playButtonsValue |= playButton3 << 4;
+  playButtonsValue |= playButton4 << 3;
+  playButtonsValue |= playButton5 << 2;
+  playButtonsValue |= playButton6 << 1;
+  playButtonsValue |= playButton7;
+
+  return playButtonsValue;
 }
 
 void generateSinWaves(void)
@@ -80,83 +126,158 @@ void generateSinWaves(void)
   }
 }
 
+int getAValue(int sample) {
+  int index = sample % 93;
+  return waveA[index];
+}
+
+int getGValue(int sample) {
+  int index = sample % 105;
+  return waveG[index];
+}
+
+int getFValue(int sample) {
+  int index = sample % 118;
+  return waveF[index];
+}
+
+int getEValue(int sample) {
+  int index = sample % 125;
+  return waveE[index];
+}
+
+int getDValue(int sample) {
+  int index = sample % 140;
+  return waveD[index];
+}
+
+// Färdig
+// OC1RS = waveA[sample] + 127;
+// sample++;
+// if (sample > 92)
+// {
+//   sample = 0;
+// }
+
 /* Interrupt Service Routine */
 void user_isr()
 {
+  int n = 0;
+  int value = 0;
+  int playButtonsValue = getPlayButtons();
+
+  // C finns inte än.
+  // if (playButtonsValue & 0x40) {
+  //     value += getCValue(sample);
+  //     n++;
+  // }
+  if (playButtonsValue & 0x20) {
+    value += getDValue(sample);
+    n++;
+  }
+  if (playButtonsValue & 0x10) {
+    value += getEValue(sample);
+    n++;
+  }
+  if (playButtonsValue & 0x8) {
+    value += getFValue(sample);
+    n++;
+  }
+  if (playButtonsValue & 0x4) {
+    value += getGValue(sample);
+    n++;
+  }
+  if (playButtonsValue & 0x2) {
+    value += getAValue(sample);
+    n++;
+  }
+  // B finns inte än.
+  // if (playButtonsValue & 0x1) {
+  //   value += getBValue(sample);
+  //   n++;
+  // }
+
+  if (n == 0) {
+    OC1RS = 0;
+  } else {
+    OC1RS = ( value / n ) + 127;
+  }
+
+  sample++;
+  if (sample >= sampleMax) { sample = 0; }
+
 
   // Gör någonting varje 24,325 mikrosekund
-
-  if (count < duration * 2)
-  {
-    OC1RS = waveA[sample] + 127;
-    sample++;
-    if (sample > 92)
-    {
-      sample = 0;
-    }
-  }
-  else if (count < duration * 3)
-  {
-    OC1RS = waveG[sample] + 127;
-    sample++;
-    if (sample > 104)
-    {
-      sample = 0;
-    }
-  }
-  else if (count < duration * 4)
-  {
-    OC1RS = waveF[sample] + 127;
-    sample++;
-    if (sample > 117)
-    {
-      sample = 0;
-    }
-  }
-  else if (count < duration * 5)
-  {
-    OC1RS = waveE[sample] + 127;
-    sample++;
-    if (sample > 124)
-    {
-      sample = 0;
-    }
-  }
-  else if (count < duration * 6)
-  {
-    OC1RS = waveD[sample] + 127;
-    sample++;
-    if (sample > 139)
-    {
-      sample = 0;
-    }
-  }
-  else if (count < duration * 7)
-  {
-  }
-  else if (count < duration * 8)
-  {
-    OC1RS = waveD[sample] + 127;
-    sample++;
-    if (sample > 139)
-    {
-      sample = 0;
-    }
-  }
-  else if (count < duration * 9)
-  {
-  }
-  else if (count < duration * 10)
-  {
-    OC1RS = waveD[sample] + 127;
-    sample++;
-    if (sample > 139)
-    {
-      sample = 0;
-    }
-  }
-
-  count++;
+  //
+  // if (count < duration * 2)
+  // {
+  //   OC1RS = waveA[sample] + 127;
+  //   sample++;
+  //   if (sample > 92)
+  //   {
+  //     sample = 0;
+  //   }
+  // }
+  // else if (count < duration * 3)
+  // {
+  //   OC1RS = waveG[sample] + 127;
+  //   sample++;
+  //   if (sample > 104)
+  //   {
+  //     sample = 0;
+  //   }
+  // }
+  // else if (count < duration * 4)
+  // {
+  //   OC1RS = waveF[sample] + 127;
+  //   sample++;
+  //   if (sample > 117)
+  //   {
+  //     sample = 0;
+  //   }
+  // }
+  // else if (count < duration * 5)
+  // {
+  //   OC1RS = waveE[sample] + 127;
+  //   sample++;
+  //   if (sample > 124)
+  //   {
+  //     sample = 0;
+  //   }
+  // }
+  // else if (count < duration * 6)
+  // {
+  //   OC1RS = waveD[sample] + 127;
+  //   sample++;
+  //   if (sample > 139)
+  //   {
+  //     sample = 0;
+  //   }
+  // }
+  // else if (count < duration * 7)
+  // {
+  // }
+  // else if (count < duration * 8)
+  // {
+  //   OC1RS = waveD[sample] + 127;
+  //   sample++;
+  //   if (sample > 139)
+  //   {
+  //     sample = 0;
+  //   }
+  // }
+  // else if (count < duration * 9)
+  // {
+  // }
+  // else if (count < duration * 10)
+  // {
+  //   OC1RS = waveD[sample] + 127;
+  //   sample++;
+  //   if (sample > 139)
+  //   {
+  //     sample = 0;
+  //   }
+  // }
 
   // Färdig
   // OC1RS = waveD[sample] + 127;
@@ -190,25 +311,17 @@ void user_isr()
   //   sample = 0;
   // }
 
-  // Färdig
-  // OC1RS = waveA[sample] + 127;
-  // sample++;
-  // if (sample > 92)
-  // {
-  //   sample = 0;
-  // }
-
   //clear interrupt flag
   IFS(0) = 0x0000;
 }
 
-volatile int *triseAdress = 0xbf886100; //
+// volatile int *triseAdress = 0xbf886100; //
 
 /* Lab-specific initialization goes here */
 void labinit()
 {
-  *triseAdress &= ~0xFF;
-  TRISD |= 0xFE0; // toggle switches
+  // *triseAdress &= ~0xFF;
+  // TRISD |= 0xFE0; // toggle switches
 
   // set priority
   IPC(2) = 0x1c;
@@ -237,10 +350,15 @@ void labinit()
   enable_interrupt();
 
   generateSinWaves();
+
+  setupPlayButtons();
 }
 
 /* This function is called repetitively from the main program */
 void labwork()
 {
   // Gör ingenting här.
+  int portD = getPlayButtons();
+  // int p = PORTD >> 9;
+  display_debug(&portD);
 }

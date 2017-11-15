@@ -1,0 +1,2 @@
+generateSound.c.o: generateSound.c
+generateSound.c :
