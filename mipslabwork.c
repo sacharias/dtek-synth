@@ -3,27 +3,12 @@
 #include "mipslab.h" /* Declatations for these labs */
 #include "generateSound.h"
 
-#define PI 3.14159265358979323846
-
-int waveA[93];
-int waveG[105];
-int waveF[118];
-int waveE[125];
-int waveD[140];
-
 double count = 0.0;
 int debug_value = 0;
 int sample = 0;
 int sampleMax = 411090;
 
 //int duration = 41109;
-
-// Get all buttons
-// int getBoardButtons() {
-//   int portD = PORTD >> 5;
-//   portD &= 0x7;
-//   return portD;
-// }
 
 // Connect to 34 on chipkit
 void setupPlayButtons() {
@@ -75,89 +60,6 @@ int* getPlayButtons() {
   return playButtonsValue;
 }
 
-void generateSinWaves(void)
-{
-  // Make waveX arrays
-  // sample rate: 41109
-
-  // Make A = 440 Hz
-  int i = 0;
-  double sum = 0.0;
-  for (i = 0; i < 93; i++)
-  {
-    waveA[i] = 127 * sin(sum);
-    sum = sum + (PI / 92); // array.length - 1
-  }
-
-  // Make G = 391,995 Hz
-  i = 0;
-  sum = 0.0;
-  for (i = 0; i < 105; i++)
-  {
-    waveG[i] = 127 * sin(sum);
-    sum = sum + (PI / 104);
-  }
-
-  // Make F = 349,228 Hz
-  i = 0;
-  sum = 0.0;
-  for (i = 0; i < 118; i++)
-  {
-    waveF[i] = 127 * sin(sum);
-    sum = sum + (PI / 117);
-  }
-
-  // Make E = 329,628 Hz
-  i = 0;
-  sum = 0.0;
-  for (i = 0; i < 125; i++)
-  {
-    waveE[i] = 127 * sin(sum);
-    sum = sum + (PI / 124);
-  }
-
-  // Make D = 293,665 Hz
-  i = 0;
-  sum = 0.0;
-  for (i = 0; i < 140; i++)
-  {
-    waveD[i] = 127 * sin(sum);
-    sum = sum + (PI / 139);
-  }
-}
-
-int getAValue(int sample) {
-  int index = sample % 93;
-  return waveA[index];
-}
-
-int getGValue(int sample) {
-  int index = sample % 105;
-  return waveG[index];
-}
-
-int getFValue(int sample) {
-  int index = sample % 118;
-  return waveF[index];
-}
-
-int getEValue(int sample) {
-  int index = sample % 125;
-  return waveE[index];
-}
-
-int getDValue(int sample) {
-  int index = sample % 140;
-  return waveD[index];
-}
-
-// Färdig
-// OC1RS = waveA[sample] + 127;
-// sample++;
-// if (sample > 92)
-// {
-//   sample = 0;
-// }
 
 /* Interrupt Service Routine */
 void user_isr()
@@ -175,22 +77,27 @@ void user_isr()
     value += getDValue(sample);
     n++;
   }
+
   if (playButtonsValue & 0x10) {
     value += getEValue(sample);
     n++;
   }
+
   if (playButtonsValue & 0x8) {
     value += getFValue(sample);
     n++;
   }
+
   if (playButtonsValue & 0x4) {
     value += getGValue(sample);
     n++;
   }
+
   if (playButtonsValue & 0x2) {
     value += getAValue(sample);
     n++;
   }
+  
   // B finns inte än.
   // if (playButtonsValue & 0x1) {
   //   value += getBValue(sample);
@@ -205,111 +112,6 @@ void user_isr()
 
   sample++;
   if (sample >= sampleMax) { sample = 0; }
-
-
-  // Gör någonting varje 24,325 mikrosekund
-  //
-  // if (count < duration * 2)
-  // {
-  //   OC1RS = waveA[sample] + 127;
-  //   sample++;
-  //   if (sample > 92)
-  //   {
-  //     sample = 0;
-  //   }
-  // }
-  // else if (count < duration * 3)
-  // {
-  //   OC1RS = waveG[sample] + 127;
-  //   sample++;
-  //   if (sample > 104)
-  //   {
-  //     sample = 0;
-  //   }
-  // }
-  // else if (count < duration * 4)
-  // {
-  //   OC1RS = waveF[sample] + 127;
-  //   sample++;
-  //   if (sample > 117)
-  //   {
-  //     sample = 0;
-  //   }
-  // }
-  // else if (count < duration * 5)
-  // {
-  //   OC1RS = waveE[sample] + 127;
-  //   sample++;
-  //   if (sample > 124)
-  //   {
-  //     sample = 0;
-  //   }
-  // }
-  // else if (count < duration * 6)
-  // {
-  //   OC1RS = waveD[sample] + 127;
-  //   sample++;
-  //   if (sample > 139)
-  //   {
-  //     sample = 0;
-  //   }
-  // }
-  // else if (count < duration * 7)
-  // {
-  // }
-  // else if (count < duration * 8)
-  // {
-  //   OC1RS = waveD[sample] + 127;
-  //   sample++;
-  //   if (sample > 139)
-  //   {
-  //     sample = 0;
-  //   }
-  // }
-  // else if (count < duration * 9)
-  // {
-  // }
-  // else if (count < duration * 10)
-  // {
-  //   OC1RS = waveD[sample] + 127;
-  //   sample++;
-  //   if (sample > 139)
-  //   {
-  //     sample = 0;
-  //   }
-  // }
-
-  // Färdig
-  // OC1RS = waveD[sample] + 127;
-  // sample++;
-  // if (sample > 139)
-  // {
-  //   sample = 0;
-  // }
-
-  // Färdig
-  // OC1RS = waveE[sample] + 127;
-  // sample++;
-  // if (sample > 124)
-  // {
-  //   sample = 0;
-  // }
-
-  // Färdig
-  // OC1RS = waveF[sample] + 127;
-  // sample++;
-  // if (sample > 117)
-  // {
-  //   sample = 0;
-  // }
-
-  // Färdig
-  // OC1RS = waveG[sample] + 127;
-  // sample++;
-  // if (sample > 104)
-  // {
-  //   sample = 0;
-  // }
 
   //clear interrupt flag
   IFS(0) = 0x0000;
