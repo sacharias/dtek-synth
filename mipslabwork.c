@@ -7,6 +7,8 @@ double count = 0.0;
 int debug_value = 0;
 int sample = 0;
 int sampleMax = 411090;
+int waveType = 0; // 0 = sine, 1 = triangle, 2 = square
+int octave = 4; // Standard = 4, Range: 2 - 4
 
 //int duration = 41109;
 
@@ -41,6 +43,10 @@ int* getPlayButtons() {
   int playButton6 = PORTD >> 8;
   playButton6 &= 0x1;
 
+  // Guide till problem:
+  // PORTF >> 2 är alltid på.
+  
+
   // Fungerar inte än
   // Pin 1
   // int playButton7 = PORTF >> 2;
@@ -69,10 +75,10 @@ void user_isr()
   int playButtonsValue = getPlayButtons();
 
   // C finns inte än.
-  // if (playButtonsValue & 0x40) {
-  //     value += getCValue(sample);
-  //     n++;
-  // }
+  if (playButtonsValue & 0x40) {
+      value += getCValue(sample);
+      n++;
+  }
   if (playButtonsValue & 0x20) {
     value += getDValue(sample);
     n++;
@@ -97,7 +103,7 @@ void user_isr()
     value += getAValue(sample);
     n++;
   }
-  
+
   // B finns inte än.
   // if (playButtonsValue & 0x1) {
   //   value += getBValue(sample);
@@ -159,7 +165,6 @@ void labinit()
 /* This function is called repetitively from the main program */
 void labwork()
 {
-  // Gör ingenting här.
   int portD = getPlayButtons();
   // int p = PORTD >> 9;
   display_debug(&portD);

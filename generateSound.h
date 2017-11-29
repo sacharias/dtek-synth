@@ -1,7 +1,7 @@
 double sin(double x);
 void generateSinWaves(void);
-int* getWaveA(void);
-int* getWaveG(void);
-int* getWaveF(void);
-int* getWaveE(void);
-int* getWaveD(void);
+int* getWaveA4(void);
+int* getWaveG4(void);
+int* getWaveF4(void);
+int* getWaveE4(void);
+int* getWaveD4(void);
