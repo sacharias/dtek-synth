@@ -3,12 +3,60 @@
 #include "mipslab.h" /* Declatations for these labs */
 #include "generateSound.h"
 
+
+//the opcodes for the MAX7221 and MAX7219
+#define OP_NOOP   0
+#define OP_DIGIT0 1
+#define OP_DIGIT1 2
+#define OP_DIGIT2 3
+#define OP_DIGIT3 4
+#define OP_DIGIT4 5
+#define OP_DIGIT5 6
+#define OP_DIGIT6 7
+#define OP_DIGIT7 8
+#define OP_DECODEMODE  9
+#define OP_INTENSITY   10
+#define OP_SCANLIMIT   11
+#define OP_SHUTDOWN    12
+#define OP_DISPLAYTEST 15
+
 double count = 0.0;
 int debug_value = 0;
 int sample = 0;
 int sampleMax = 411090;
 
 //int duration = 41109;
+
+
+void setCs(int high){
+  if(high){
+    // Sätt cs till HIGH
+    PORTESET = 0x0004;
+  } else {
+    // Sätt cs till LOW
+    PORTECLR = 0x0004;
+  }
+}
+
+void setData(int high){
+  if(high){
+    // Sätt data till HIGH
+    PORTESET = 0x0002;
+  } else {
+    // Sätt DATA till LOW
+    PORTECLR = 0x0002;
+  }
+}
+
+void setClk(int high){
+  if(high){
+    // Sätt clk till HIGH
+    PORTESET = 0x0001;
+  } else {
+    // Sätt clk till LOW
+    PORTECLR = 0x0001;
+  }
+}
 
 // Connect to 34 on chipkit
 void setupPlayButtons() {
@@ -74,6 +122,7 @@ void user_isr()
   //     n++;
   // }
   if (playButtonsValue & 0x20) {
+    PORTESET = 0x2;
     value += getDValue(sample);
     n++;
   }
@@ -97,7 +146,7 @@ void user_isr()
     value += getAValue(sample);
     n++;
   }
-  
+
   // B finns inte än.
   // if (playButtonsValue & 0x1) {
   //   value += getBValue(sample);
@@ -117,6 +166,81 @@ void user_isr()
   IFS(0) = 0x0000;
 }
 
+void spiTransfer(char data[]) {
+    //Create an array with the data to shift out
+    // [0, 0, 0, 0, 1, 1, 1, 1]
+    setCs(0);
+
+    int i;
+    for (i = 0; i < 16; i++){
+      setClk(0);
+      setData(data[i]);
+      quicksleep(80);
+      setClk(1);
+      quicksleep(80);
+    }
+
+    setCs(1);
+    setClk(0);
+    quicksleep(80);
+
+
+}
+
+void shutdownLamps(int address, int down){
+  if(down){
+    //spiTransfer(address, OP_SHUTDOWN,(char)0);
+  }
+}
+
+
+void initLamps(){
+  // Sätt upp output på ledlamporna
+  TRISECLR = 0x0001;
+  TRISECLR = 0x0002;
+  TRISECLR = 0x0004;
+  //int dataarray = {0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1};
+//  spiTransfer(dataarray);
+  char normalOperation[] = {0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1};
+  spiTransfer(normalOperation);
+
+  char scanlimit[] = {0,0,0,0, 1,0,1,1, 0,0,0,0 ,0,1,1,1};
+  spiTransfer(scanlimit);
+
+  char intensity[] = {0,0,0,0, 1,0,1,0, 0,0,0,0 ,0,0,0,1};
+  spiTransfer(intensity);
+
+  char digit0[] = {0,0,0,0, 0,0,0,1, 0,0,0,0 ,0,0,0,1 };
+  spiTransfer(digit0);
+
+  char digit1[] = {0,0,0,0, 0,0,1,0, 0,0,0,0 ,0,0,1,0 };
+  spiTransfer(digit1);
+
+  char digit2[] = {0,0,0,0, 0,0,1,1, 0,0,0,0 ,0,1,0,0 };
+  spiTransfer(digit2);
+
+  char digit3[] = {0,0,0,0, 0,1,0,0, 0,0,0,0 ,1,0,0,0 };
+  spiTransfer(digit3);
+
+  char digit4[] = {0,0,0,0, 0,1,0,1, 0,0,0,1 ,0,0,0,0 };
+  spiTransfer(digit4);
+
+  char digit5[] = {0,0,0,0, 0,1,1,0, 0,0,1,0 ,0,0,0,0 };
+  spiTransfer(digit5);
+
+  char digit6[] = {0,0,0,0, 0,1,1,1, 0,1,0,0 ,0,0,0,0 };
+  spiTransfer(digit6);
+
+  char digit7[] = {0,0,0,0, 1,0,0,0, 1,0,0,0 ,0,0,0,0 };
+  spiTransfer(digit7);
+  spiTransfer(digit7);
+}
+
+
+
+
+
+
 // volatile int *triseAdress = 0xbf886100; //
 
 /* Lab-specific initialization goes here */
@@ -125,10 +249,13 @@ void labinit()
   // *triseAdress &= ~0xFF;
   // TRISD |= 0xFE0; // toggle switches
 
+  initLamps();
   // set priority
   IPC(2) = 0x1c;
+
   //clear interrupt flag
   IFSCLR(0) = 0x0100;
+
   // enable interrupt timer
   IECSET(0) = 0x0100;
 
@@ -150,17 +277,20 @@ void labinit()
   OC1CONSET = 0x8000; // Start PWM
 
   enable_interrupt();
-
   generateSinWaves();
-
   setupPlayButtons();
 }
+
 
 /* This function is called repetitively from the main program */
 void labwork()
 {
-  // Gör ingenting här.
+
+
+
+
+
   int portD = getPlayButtons();
-  // int p = PORTD >> 9;
-  display_debug(&portD);
+
+
 }
