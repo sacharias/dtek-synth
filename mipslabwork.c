@@ -193,6 +193,144 @@ void shutdownLamps(int address, int down){
   }
 }
 
+void deployMatrice(char *matrice){
+  int x = 16;
+  int y = 8;
+
+  // first row second led
+  char digit0[] = {0,0,0,0, 0,0,0,1, 0,0,0,0 ,0,0,0,0 };
+  int i = 0;
+  for(i =0; i < y; i++){
+    digit0[8 + i] = matrice[i + 8];
+  }
+  spiTransfer(digit0);
+
+  // first row first led
+  for(i =0; i < y; i++){
+    digit0[8 + i] = matrice[i];
+  }
+  spiTransfer(digit0);
+
+  // second row second led
+  char digit1[] = {0,0,0,0, 0,0,1,0, 0,0,0,0 ,0,0,0,0 };
+  for(i =0; i < y; i++){
+    digit1[8 + i] = matrice[16 + i + 8];
+  }
+  spiTransfer(digit1);
+
+  // second row first led
+  for(i =0; i < y; i++){
+    digit1[8 + i] = matrice[16 + i];
+  }
+  spiTransfer(digit1);
+
+  // third row second led
+  char digit2[] = {0,0,0,0, 0,0,1,1, 0,0,0,0 ,0,0,0,0 };
+  for(i =0; i < y; i++){
+    digit2[8 + i] = matrice[32 + i + 8];
+  }
+  spiTransfer(digit2);
+
+  // third row first led
+  for(i =0; i < y; i++){
+    digit2[8 + i] = matrice[32 + i];
+  }
+  spiTransfer(digit2);
+
+  // fourth row second led
+  char digit3[] = {0,0,0,0, 0,1,0,0, 0,0,0,0 ,1,0,0,0 };
+  for(i =0; i < y; i++){
+    digit3[8 + i] = matrice[48 + i + 8];
+  }
+  spiTransfer(digit3);
+
+  // fourth row first led
+  for(i =0; i < y; i++){
+    digit3[8 + i] = matrice[48 + i];
+  }
+  spiTransfer(digit3);
+
+  // fifth row second led
+  char digit4[] = {0,0,0,0, 0,1,0,1, 0,0,0,0 ,0,0,0,0 };
+  for(i =0; i < y; i++){
+    digit4[8 + i] = matrice[64 + i + 8];
+  }
+  spiTransfer(digit4);
+
+  // fifth row first led
+  for(i =0; i < y; i++){
+    digit4[8 + i] = matrice[64 + i];
+  }
+  spiTransfer(digit4);
+
+  // 6 row second led
+  char digit5[] = {0,0,0,0, 0,1,1,0, 0,0,1,0 ,0,0,0,0 };
+  for(i =0; i < y; i++){
+    digit5[8 + i] = matrice[80 + i + 8];
+  }
+  spiTransfer(digit5);
+
+  // 6 row first led
+  for(i =0; i < y; i++){
+    digit5[8 + i] = matrice[80 + i];
+  }
+  spiTransfer(digit5);
+
+  // 7 row second led
+  char digit6[] = {0,0,0,0, 0,1,1,1, 0,0,0,0 ,0,0,0,0 };
+  for(i =0; i < y; i++){
+    digit6[8 + i] = matrice[96 + i + 8];
+  }
+  spiTransfer(digit6);
+
+  // 7 row first led
+  for(i =0; i < y; i++){
+    digit6[8 + i] = matrice[96 + i];
+  }
+  spiTransfer(digit6);
+
+  // 8 row second led
+  char digit7[] = {0,0,0,0, 1,0,0,0, 1,0,0,0 ,0,0,0,0 };
+  for(i =0; i < y; i++){
+    digit7[8 + i] = matrice[112 + i + 8];
+  }
+  spiTransfer(digit7);
+
+  // 7 row first led
+  for(i =0; i < y; i++){
+    digit7[8 + i] = matrice[112 + i];
+  }
+  spiTransfer(digit7);
+
+}
+
+
+void test(){
+  char twoDim[8][16];
+
+  int y = 8;
+  int x = 16;
+  int i = 0;
+  for(i = 0; i < y; y++){
+    int j = 0;
+    for(j = 0; j < x; j++){
+      twoDim[i][j] = 0;
+    }
+  }
+
+  deployMatrice(twoDim);
+
+  // 0000 0000 0000 0000
+  // 0000 0000 0000 0000
+  // 0000 0000 0000 0000
+  // 0000 0000 0000 0000
+  // 0000 0000 0000 0000
+  // 0000 0000 0000 0000
+  // 0000 0000 0000 0000
+  // 0000 0000 0000 0000
+
+}
+
 
 void initLamps(){
   // Sätt upp output på ledlamporna
@@ -210,30 +348,31 @@ void initLamps(){
   char intensity[] = {0,0,0,0, 1,0,1,0, 0,0,0,0 ,0,0,0,1};
   spiTransfer(intensity);
 
-  char digit0[] = {0,0,0,0, 0,0,0,1, 0,0,0,0 ,0,0,0,1 };
-  spiTransfer(digit0);
-
-  char digit1[] = {0,0,0,0, 0,0,1,0, 0,0,0,0 ,0,0,1,0 };
-  spiTransfer(digit1);
-
-  char digit2[] = {0,0,0,0, 0,0,1,1, 0,0,0,0 ,0,1,0,0 };
-  spiTransfer(digit2);
-
-  char digit3[] = {0,0,0,0, 0,1,0,0, 0,0,0,0 ,1,0,0,0 };
-  spiTransfer(digit3);
-
-  char digit4[] = {0,0,0,0, 0,1,0,1, 0,0,0,1 ,0,0,0,0 };
-  spiTransfer(digit4);
-
-  char digit5[] = {0,0,0,0, 0,1,1,0, 0,0,1,0 ,0,0,0,0 };
-  spiTransfer(digit5);
-
-  char digit6[] = {0,0,0,0, 0,1,1,1, 0,1,0,0 ,0,0,0,0 };
-  spiTransfer(digit6);
-
-  char digit7[] = {0,0,0,0, 1,0,0,0, 1,0,0,0 ,0,0,0,0 };
-  spiTransfer(digit7);
-  spiTransfer(digit7);
+  test();
+  // char digit0[] = {0,0,0,0, 0,0,0,1, 0,0,0,0 ,0,0,0,1 };
+  // spiTransfer(digit0);
+  //
+  // char digit1[] = {0,0,0,0, 0,0,1,0, 0,0,0,0 ,0,0,1,0 };
+  // spiTransfer(digit1);
+  //
+  // char digit2[] = {0,0,0,0, 0,0,1,1, 0,0,0,0 ,0,1,0,0 };
+  // spiTransfer(digit2);
+  //
+  // char digit3[] = {0,0,0,0, 0,1,0,0, 0,0,0,0 ,1,0,0,0 };
+  // spiTransfer(digit3);
+  //
+  // char digit4[] = {0,0,0,0, 0,1,0,1, 0,0,0,1 ,0,0,0,0 };
+  // spiTransfer(digit4);
+  //
+  // char digit5[] = {0,0,0,0, 0,1,1,0, 0,0,1,0 ,0,0,0,0 };
+  // spiTransfer(digit5);
+  //
+  // char digit6[] = {0,0,0,0, 0,1,1,1, 0,1,0,0 ,0,0,0,0 };
+  // spiTransfer(digit6);
+  //
+  // char digit7[] = {0,0,0,0, 1,0,0,0, 1,0,0,0 ,0,0,0,0 };
+  // spiTransfer(digit7);
+  // spiTransfer(digit7);
 }
 
 
