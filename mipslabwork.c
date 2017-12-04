@@ -306,16 +306,13 @@ void deployMatrice(char *matrice){
 
 
 void test(){
-  char twoDim[8][16];
+  char twoDim[128];
 
-  int y = 8;
-  int x = 16;
+  int y = 128;
+
   int i = 0;
   for(i = 0; i < y; y++){
-    int j = 0;
-    for(j = 0; j < x; j++){
-      twoDim[i][j] = 0;
-    }
+    twoDim[i] = 0;
   }
 
   deployMatrice(twoDim);
