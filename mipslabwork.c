@@ -173,29 +173,30 @@ void user_isr()
 }
 
 void spiTransferDuo(char data1[], char data2[]) {
+  int sleepTime = 40;
   setCs(0);
 
   int i;
   for (i = 0; i < 16; i++) {
     setClk(0);
     setData(data2[i]);
-    quicksleep(80);
+    quicksleep(sleepTime);
     setClk(1);
-    quicksleep(80);
+    quicksleep(sleepTime);
   }
 
   i = 0;
   for (i = 0; i < 16; i++) {
     setClk(0);
     setData(data1[i]);
-    quicksleep(80);
+    quicksleep(sleepTime);
     setClk(1);
-    quicksleep(80);
+    quicksleep(sleepTime);
   }
 
   setCs(1);
   setClk(0);
-  quicksleep(80);
+  quicksleep(sleepTime);
 }
 
 void setLedMatrixHelper(char m[], int b1[], int b2[], char dCode[]) {
@@ -287,32 +288,96 @@ void initLamps() {
 
   // Reset - turn off all lights
   char zeros[] = { 
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
                   };
   setLedMatrix(zeros);
 }
 
 void fallingStock() {
-  int fillFrom = 0;
-  int i;
-  for (i = 0; i < 8; i++) {
+  while (1) {
+    int del = 150000;
     char matrix[128];
-    int j;
-    for (j = fillFrom; j < 16; i++) {
-      matrix[j] = 1;
+    int i;
+    for (i = 0; i < 128; i++) {
+      matrix[i] = 1;
     }
     setLedMatrix(matrix);
-    quicksleep(1000000);
-    fillFrom += 16;
-    }
 
+    quicksleep(del);
+      for (i = 0; i < 16; i++) {
+      matrix[i] = 0;
+    }
+    setLedMatrix(matrix);
+
+    quicksleep(del);
+      for (i = 0; i < 32; i++) {
+      matrix[i] = 0;
+    }
+    setLedMatrix(matrix);
+
+    quicksleep(del);
+      for (i = 0; i < 48; i++) {
+      matrix[i] = 0;
+    }
+    setLedMatrix(matrix);
+
+    quicksleep(del);
+      for (i = 0; i < 64; i++) {
+      matrix[i] = 0;
+    }
+    setLedMatrix(matrix);
+
+    quicksleep(del);
+      for (i = 0; i < 80; i++) {
+      matrix[i] = 0;
+    }
+    setLedMatrix(matrix);
+
+    quicksleep(del);
+      for (i = 0; i < 96; i++) {
+      matrix[i] = 0;
+    }
+    setLedMatrix(matrix);
+
+    quicksleep(del);
+      for (i = 0; i < 112; i++) {
+      matrix[i] = 0;
+    }
+    setLedMatrix(matrix);
+
+    quicksleep(del);
+      for (i = 0; i < 128; i++) {
+      matrix[i] = 0;
+    }
+    setLedMatrix(matrix);
+  }
+
+  // int fillFrom = 0;
+  // int i;
+  // for (i = 0; i < 8; i++) {
+  //   char matrix[128];
+  //   int k;
+  //   for (k = 0; i < 128; k++) {
+  //     matrix[k] = 1;
+  //   }
+  //   // int j = fillFrom;
+  //   // for (j; j < 16; i++) {
+  //   //   matrix[j] = 1;
+  //   // }
+  //   setLedMatrix(matrix);
+  //   quicksleep(1000000);
+  //   // fillFrom += 16;
+  //   // if (fillFrom >= 112) {
+  //   //   fillFrom = 0;
+  //   // }
+  // }
 }
   // char matrix[] = { 
   //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
@@ -375,17 +440,17 @@ void labinit() {
 
   initLamps();
 
-  // char matrix[128] = { 
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0,
-  //                 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-  //                 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
-  //                 };
-  // setLedMatrix(matrix);
+  char matrix[128] = { 
+                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1,
+                  0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0,
+                  0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
+                  0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
+                  0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0,
+                  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1,
+                  0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
+                  };
+  setLedMatrix(matrix);
 
   fallingStock();
 }
