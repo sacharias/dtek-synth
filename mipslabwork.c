@@ -467,61 +467,77 @@ void initLamps()
 
 // volatile int *triseAdress = 0xbf886100; //
 
-void setLedMatrix(char matrix[])
-{ 
-  char OneDigit0[] = {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0};
-  char TwoDigit0[] = {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1};
-  spiTransferDuo(OneDigit0, TwoDigit0);
-  
-
-  // char digit1[] = {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0};
-  // spiTransfer(digit1);
-
-  // char digit2[] = {0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0};
-  // spiTransfer(digit2);
-
-  // char digit3[] = {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0};
-  // spiTransfer(digit3);
-
-  // char digit4[] = {0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0};
-  // spiTransfer(digit4);
-
-  char digit5[] = {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0};
-  // spiTransfer(digit5);
-
-  // char digit6[] = {0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0};
-  // spiTransfer(digit6);
-
-  // char digit7[] = {0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0};
-  // spiTransfer(digit6);
+void setLedMatrixHelper(char m[], int b1[], int b2[], char dCode[]) {
+  char OneCol0[] = {
+    dCode[0], dCode[1], dCode[2], dCode[3], dCode[4], dCode[5], dCode[6], dCode[7], 
+    m[b1[0]], m[b1[1]], m[b1[2]], m[b1[3]], m[b1[4]], m[b1[5]], m[b1[6]], m[b1[7]]
+  };
+  char TwoCol0[] = {
+    dCode[0], dCode[1], dCode[2], dCode[3], dCode[4], dCode[5], dCode[6], dCode[7], 
+    m[b2[0]], m[b2[1]], m[b2[2]], m[b2[3]], m[b2[4]], m[b2[5]], m[b2[6]], m[b2[7]]
+  };
+  spiTransferDuo(OneCol0, TwoCol0);
+}
 
 
-  // if (globalCounter >= 10000)
-  // {
-  //   if (currentState == 0)
-  //   {
-  //     char digit17[] = {0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1};
-  //     spiTransfer(digit17);
-  //     currentState++;
-  //   }
-  //   else if (currentState == 1)
-  //   {
-  //     char digit17[] = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
-  //     spiTransfer(digit17);
-  //     currentState++;
-  //   }
-  //   else
-  //   {
-  //     char digit17[] = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
-  //     spiTransfer(digit17);
-  //     currentState = 0;
-  //   }
-  //   globalCounter = 0;
-  // }
-  // else
-  // {
-  //   globalCounter++;
-  // }
+void setLedMatrix(char m[]) { 
+  int b1[] = {112, 96, 80, 64, 48, 32, 16, 0};
+  int b2[] = {120, 104, 88, 72, 56, 40, 24, 8};
+
+  char digit0[] = {0, 0, 0, 0, 0, 0, 0, 1};
+  char digit1[] = {0, 0, 0, 0, 0, 0, 1, 0};
+  char digit2[] = {0, 0, 0, 0, 0, 0, 1, 1};
+  char digit3[] = {0, 0, 0, 0, 0, 1, 0, 0};
+  char digit4[] = {0, 0, 0, 0, 0, 1, 0, 1};
+  char digit5[] = {0, 0, 0, 0, 0, 1, 1, 0};
+  char digit6[] = {0, 0, 0, 0, 0, 1, 1, 1};
+  char digit7[] = {0, 0, 0, 0, 1, 0, 0, 0};
+
+  setLedMatrixHelper(m, b1, b2, digit0);
+
+  int i;
+  for (i = 0; i < 8; i++) {
+    b1[i] = b1[i] + 1;
+    b2[i] = b2[i] + 1;
+  }
+  setLedMatrixHelper(m, b1, b2, digit1);
+
+  for (i = 0; i < 8; i++) {
+    b1[i] = b1[i] + 1;
+    b2[i] = b2[i] + 1;
+  }
+  setLedMatrixHelper(m, b1, b2, digit2);
+
+  for (i = 0; i < 8; i++) {
+    b1[i] = b1[i] + 1;
+    b2[i] = b2[i] + 1;
+  }
+  setLedMatrixHelper(m, b1, b2, digit3);
+
+  for (i = 0; i < 8; i++) {
+    b1[i] = b1[i] + 1;
+    b2[i] = b2[i] + 1;
+  }
+  setLedMatrixHelper(m, b1, b2, digit4);
+
+  for (i = 0; i < 8; i++) {
+    b1[i] = b1[i] + 1;
+    b2[i] = b2[i] + 1;
+  }
+  setLedMatrixHelper(m, b1, b2, digit5);
+
+  for (i = 0; i < 8; i++) {
+    b1[i] = b1[i] + 1;
+    b2[i] = b2[i] + 1;
+  }
+  setLedMatrixHelper(m, b1, b2, digit6);
+
+  for (i = 0; i < 8; i++) {
+    b1[i] = b1[i] + 1;
+    b2[i] = b2[i] + 1;
+  }
+  setLedMatrixHelper(m, b1, b2, digit7);
+
 }
 
 /* Lab-specific initialization goes here */
@@ -563,14 +579,14 @@ void labinit()
   initLamps();
 
   char matrix[128] = { 
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                  1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0,
+                  1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
+                  1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0,
+                  1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0,
+                  1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0,
+                  1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0,
+                  1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
+                  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
                 };
 
   setLedMatrix(matrix);
