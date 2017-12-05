@@ -26,46 +26,33 @@ int sampleMax = 411090;
 
 int globalCounter = 0;
 int currentState = 0;
-
 //int duration = 41109;
 
-void setCs(int high)
-{
-  if (high)
-  {
+void setCs(int high) {
+  if (high) {
     // Sätt cs till HIGH
     PORTESET = 0x0004;
-  }
-  else
-  {
+  } else {
     // Sätt cs till LOW
     PORTECLR = 0x0004;
   }
 }
 
-void setData(int high)
-{
-  if (high)
-  {
+void setData(int high) {
+  if (high) {
     // Sätt data till HIGH
     PORTESET = 0x0002;
-  }
-  else
-  {
+  } else {
     // Sätt DATA till LOW
     PORTECLR = 0x0002;
   }
 }
 
-void setClk(int high)
-{
-  if (high)
-  {
+void setClk(int high) {
+  if (high) {
     // Sätt clk till HIGH
     PORTESET = 0x0001;
-  }
-  else
-  {
+  } else {
     // Sätt clk till LOW
     PORTECLR = 0x0001;
   }
@@ -171,42 +158,18 @@ void user_isr()
   //   n++;
   // }
 
-  if (n == 0)
-  {
+  if (n == 0) {
     OC1RS = 0;
-  }
-  else
-  {
+  } else {
     OC1RS = (value / n) + 127;
   }
 
   sample++;
-  if (sample >= sampleMax)
-  {
+  if (sample >= sampleMax) {
     sample = 0;
   }
-
   //clear interrupt flag
   IFS(0) = 0x0000;
-}
-
-void spiTransfer(char data[]) {
-  //Create an array with the data to shift out
-  // [0, 0, 0, 0, 1, 1, 1, 1]
-  setCs(0);
-
-  int i;
-  for (i = 0; i < 16; i++) {
-    setClk(0);
-    setData(data[i]);
-    quicksleep(80);
-    setClk(1);
-    quicksleep(80);
-  }
-
-  setCs(1);
-  setClk(0);
-  quicksleep(80);
 }
 
 void spiTransferDuo(char data1[], char data2[]) {
@@ -235,238 +198,6 @@ void spiTransferDuo(char data1[], char data2[]) {
   quicksleep(80);
 }
 
-void shutdownLamps(int address, int down)
-{
-  if (down)
-  {
-    //spiTransfer(address, OP_SHUTDOWN,(char)0);
-  }
-}
-
-void deployMatrice(char *matrice)
-{
-  int x = 16;
-  int y = 8;
-
-  // first row second led
-  char digit0[] = {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
-  int i = 0;
-  for (i = 0; i < y; i++)
-  {
-    digit0[8 + i] = matrice[i + 8];
-  }
-  spiTransfer(digit0);
-
-  // first row first led
-  for (i = 0; i < y; i++)
-  {
-    digit0[8 + i] = matrice[i];
-  }
-  spiTransfer(digit0);
-
-  // second row second led
-  char digit1[] = {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  for (i = 0; i < y; i++)
-  {
-    digit1[8 + i] = matrice[16 + i + 8];
-  }
-  spiTransfer(digit1);
-
-  // second row first led
-  for (i = 0; i < y; i++)
-  {
-    digit1[8 + i] = matrice[16 + i];
-  }
-  spiTransfer(digit1);
-
-  // third row second led
-  char digit2[] = {0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
-  for (i = 0; i < y; i++)
-  {
-    digit2[8 + i] = matrice[32 + i + 8];
-  }
-  spiTransfer(digit2);
-
-  // third row first led
-  for (i = 0; i < y; i++)
-  {
-    digit2[8 + i] = matrice[32 + i];
-  }
-  spiTransfer(digit2);
-
-  // fourth row second led
-  char digit3[] = {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0};
-  for (i = 0; i < y; i++)
-  {
-    digit3[8 + i] = matrice[48 + i + 8];
-  }
-  spiTransfer(digit3);
-
-  // fourth row first led
-  for (i = 0; i < y; i++)
-  {
-    digit3[8 + i] = matrice[48 + i];
-  }
-  spiTransfer(digit3);
-
-  // fifth row second led
-  char digit4[] = {0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
-  for (i = 0; i < y; i++)
-  {
-    digit4[8 + i] = matrice[64 + i + 8];
-  }
-  spiTransfer(digit4);
-
-  // fifth row first led
-  for (i = 0; i < y; i++)
-  {
-    digit4[8 + i] = matrice[64 + i];
-  }
-  spiTransfer(digit4);
-
-  // 6 row second led
-  char digit5[] = {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0};
-  for (i = 0; i < y; i++)
-  {
-    digit5[8 + i] = matrice[80 + i + 8];
-  }
-  spiTransfer(digit5);
-
-  // 6 row first led
-  for (i = 0; i < y; i++)
-  {
-    digit5[8 + i] = matrice[80 + i];
-  }
-  spiTransfer(digit5);
-
-  // 7 row second led
-  char digit6[] = {0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
-  for (i = 0; i < y; i++)
-  {
-    digit6[8 + i] = matrice[96 + i + 8];
-  }
-  spiTransfer(digit6);
-
-  // 7 row first led
-  for (i = 0; i < y; i++)
-  {
-    digit6[8 + i] = matrice[96 + i];
-  }
-  spiTransfer(digit6);
-
-  // 8 row second led
-  char digit7[] = {0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0};
-  for (i = 0; i < y; i++)
-  {
-    digit7[8 + i] = matrice[112 + i + 8];
-  }
-  spiTransfer(digit7);
-
-  // 7 row first led
-  for (i = 0; i < y; i++)
-  {
-    digit7[8 + i] = matrice[112 + i];
-  }
-  spiTransfer(digit7);
-}
-
-void test()
-{
-  char twoDim[128];
-
-  int y = 128;
-
-  int i = 0;
-  for (i = 0; i < y; y++)
-  {
-    twoDim[i] = 0;
-  }
-  deployMatrice(twoDim);
-
-  // 0000 0000 0000 0000
-  // 0000 0000 0000 0000
-  // 0000 0000 0000 0000
-  // 0000 0000 0000 0000
-  // 0000 0000 0000 0000
-  // 0000 0000 0000 0000
-  // 0000 0000 0000 0000
-  // 0000 0000 0000 0000
-}
-
-void initLamps()
-{
-  // Sätt upp output på ledlamporna
-  TRISECLR = 0x0001;
-  TRISECLR = 0x0002;
-  TRISECLR = 0x0004;
-  //int dataarray = {0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1};
-  //  spiTransfer(dataarray);
-  char normalOperation[] = {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
-  spiTransfer(normalOperation);
-
-  char scanlimit[] = {0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1};
-  spiTransfer(scanlimit);
-
-  char intensity[] = {0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1};
-  spiTransfer(intensity);
-
-  // test();
-
-  // VERSION 1 - DIAGONAL
-  // char digit0[] = {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1};
-  // spiTransfer(digit0);
-
-  // char digit1[] = {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0};
-  // spiTransfer(digit1);
-
-  // char digit2[] = {0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0};
-  // spiTransfer(digit2);
-
-  // char digit3[] = {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0};
-  // spiTransfer(digit3);
-
-  // char digit4[] = {0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0};
-  // spiTransfer(digit4);
-
-  // char digit5[] = {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0};
-  // spiTransfer(digit5);
-
-  // char digit6[] = {0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0};
-  // spiTransfer(digit6);
-
-  // char digit7[] = {0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0};
-  // spiTransfer(digit7);
-  // spiTransfer(digit7);
-
-  // RESET - turn off all lights
-  char digit10[] = {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
-  spiTransfer(digit10);
-
-  char digit11[] = {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  spiTransfer(digit11);
-
-  char digit12[] = {0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
-  spiTransfer(digit12);
-
-  char digit13[] = {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  spiTransfer(digit13);
-
-  char digit14[] = {0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
-  spiTransfer(digit14);
-
-  char digit15[] = {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  spiTransfer(digit15);
-
-  char digit16[] = {0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
-  spiTransfer(digit16);
-
-  char digit17[] = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  spiTransfer(digit17);
-  spiTransfer(digit17);
-}
-
-// volatile int *triseAdress = 0xbf886100; //
-
 void setLedMatrixHelper(char m[], int b1[], int b2[], char dCode[]) {
   char OneCol0[] = {
     dCode[0], dCode[1], dCode[2], dCode[3], dCode[4], dCode[5], dCode[6], dCode[7], 
@@ -478,7 +209,6 @@ void setLedMatrixHelper(char m[], int b1[], int b2[], char dCode[]) {
   };
   spiTransferDuo(OneCol0, TwoCol0);
 }
-
 
 void setLedMatrix(char m[]) { 
   int b1[] = {112, 96, 80, 64, 48, 32, 16, 0};
@@ -537,12 +267,31 @@ void setLedMatrix(char m[]) {
     b2[i] = b2[i] + 1;
   }
   setLedMatrixHelper(m, b1, b2, digit7);
+}
 
+void initLamps() {
+  // Sätt upp output på ledlamporna
+  TRISECLR = 0x0001;
+  TRISECLR = 0x0002;
+  TRISECLR = 0x0004;
+
+  // Setup - LED Matrix
+  char normalOperation[] = {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
+  spiTransferDuo(normalOperation, normalOperation);
+
+  char scanlimit[] = {0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1};
+  spiTransferDuo(scanlimit, scanlimit);
+
+  char intensity[] = {0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1};
+  spiTransferDuo(intensity, intensity);
+
+  // Reset - turn off all lights
+  char zeros[128];
+  setLedMatrix(zeros);
 }
 
 /* Lab-specific initialization goes here */
-void labinit()
-{
+void labinit() {
   // *triseAdress &= ~0xFF;
   // TRISD |= 0xFE0; // toggle switches
 
@@ -579,21 +328,19 @@ void labinit()
   initLamps();
 
   char matrix[128] = { 
-                  1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0,
-                  1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-                  1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0,
-                  1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0,
-                  1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0,
-                  1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0,
-                  1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-                  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
-                };
-
+                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1,
+                  0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0,
+                  0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
+                  0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
+                  0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0,
+                  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1,
+                  0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
+                  };
   setLedMatrix(matrix);
 }
 
 /* This function is called repetitively from the main program */
-void labwork()
-{
+void labwork() {
   int portD = getPlayButtons();
 }
