@@ -6,9 +6,7 @@ int waveG4[105];
 int waveA4[93];
 int waveB4[83];
 
-
 #define PI 3.14159265358979323846
-
 
 double sin(double x)
 {

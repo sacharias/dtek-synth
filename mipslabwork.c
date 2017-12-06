@@ -3,6 +3,12 @@
 #include "mipslab.h" /* Declatations for these labs */
 #include "generateSound.h"
 
+// Testing Variables
+int count = 0;
+int testVal = 0;
+int updateRate = 60; // per second
+
+// Global Variables
 int sample = 0;
 int sampleMax = 411090;
 
@@ -13,8 +19,21 @@ int sampleMax = 411090;
  */
 int mode = 0;
 
-/* Interrupt Service Routine */
-void user_isr() {
+/*
+ * 0 = Octave 3
+ * 1 = Octave 4 (Standard)
+ * 2 = Octave 5
+ */ 
+int octave = 1;
+
+/*
+ * 0 = Sine
+ * 1 = Saw
+ * 2 = Square
+ */
+int waveForm = 0;
+
+void updateSound() {
   int n = 0;
   int value = 0;
   int playButtonsValue = getPlayBtns();
@@ -65,8 +84,13 @@ void user_isr() {
   if (sample >= sampleMax) {
     sample = 0;
   }
-  //clear interrupt flag
-  IFS(0) = 0x0000;
+}
+
+/* Interrupt Service Routine */
+void user_isr() {
+  updateSound();
+
+  IFS(0) = 0x0000; // Clear interrupt flag
 }
 
 void labinit() {
@@ -96,13 +120,8 @@ void labinit() {
   setupPlayButtons();
 
   initLamps();
-
   // waveShow();
 }
 
 /* This function is called repetitively from the main program */
-void labwork() {
-  int portD = getPlayBtns();
-  int portD2 = getBoardBtns();
-  display_debug(&portD2);
-}
+void labwork() {}
