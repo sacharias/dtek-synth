@@ -2,13 +2,18 @@
 #include <pic32mx.h>
 #include "mipslab.h"
 
-int getBoardBtns(){
+void setupPlayButtons() {
+  TRISDSET = 0xFFFF;
+  TRISFSET = 0x8;
+}
+
+int getBoardBtns() {
   int portD = PORTD >> 5;
   portD &= 0x7;
   return portD;
 }
 
-int *getPlayBtns() {
+int getPlayBtns() {
   // Pin 5
   int playButton1 = PORTD >> 1;
   playButton1 &= 0x1;

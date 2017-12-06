@@ -13,11 +13,6 @@ int sampleMax = 411090;
  */
 int mode = 0;
 
-void setupPlayButtons() {
-  TRISDSET = 0xFFFF;
-  TRISFSET = 0x8;
-}
-
 /* Interrupt Service Routine */
 void user_isr() {
   int n = 0;
@@ -72,96 +67,6 @@ void user_isr() {
   }
   //clear interrupt flag
   IFS(0) = 0x0000;
-}
-
-void initLamps() {
-  // Setup Output Led Lamps
-  TRISECLR = 0x0001;
-  TRISECLR = 0x0002;
-  TRISECLR = 0x0004;
-
-  // Setup - LED Matrix
-  char normalOperation[] = {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
-  spiTransferDuo(normalOperation, normalOperation);
-
-  char scanlimit[] = {0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1};
-  spiTransferDuo(scanlimit, scanlimit);
-
-  char intensity[] = {0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1};
-  spiTransferDuo(intensity, intensity);
-
-  // Reset - turn off all lights
-  char matrix[] = { 
-    1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
-  };
-  setLedMatrix(matrix);
-}
-
-void waveShow() {
-  while (1) {
-    int del = 150000;
-    char matrix[128];
-    int i;
-    for (i = 0; i < 128; i++) {
-      matrix[i] = 1;
-    }
-    setLedMatrix(matrix);
-
-    quicksleep(del);
-      for (i = 0; i < 16; i++) {
-      matrix[i] = 0;
-    }
-    setLedMatrix(matrix);
-
-    quicksleep(del);
-      for (i = 0; i < 32; i++) {
-      matrix[i] = 0;
-    }
-    setLedMatrix(matrix);
-
-    quicksleep(del);
-      for (i = 0; i < 48; i++) {
-      matrix[i] = 0;
-    }
-    setLedMatrix(matrix);
-
-    quicksleep(del);
-      for (i = 0; i < 64; i++) {
-      matrix[i] = 0;
-    }
-    setLedMatrix(matrix);
-
-    quicksleep(del);
-      for (i = 0; i < 80; i++) {
-      matrix[i] = 0;
-    }
-    setLedMatrix(matrix);
-
-    quicksleep(del);
-      for (i = 0; i < 96; i++) {
-      matrix[i] = 0;
-    }
-    setLedMatrix(matrix);
-
-    quicksleep(del);
-      for (i = 0; i < 112; i++) {
-      matrix[i] = 0;
-    }
-    setLedMatrix(matrix);
-
-    quicksleep(del);
-      for (i = 0; i < 128; i++) {
-      matrix[i] = 0;
-    }
-    setLedMatrix(matrix);
-  }
 }
 
 void labinit() {

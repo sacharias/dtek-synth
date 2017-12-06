@@ -123,3 +123,33 @@ void setLedMatrix(char m[]) {
   }
   setLedMatrixHelper(m, b1, b2, digit7);
 }
+
+void initLamps() {
+  // Setup Output Led Lamps
+  TRISECLR = 0x0001;
+  TRISECLR = 0x0002;
+  TRISECLR = 0x0004;
+
+  // Setup - LED Matrix
+  char normalOperation[] = {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
+  spiTransferDuo(normalOperation, normalOperation);
+
+  char scanlimit[] = {0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1};
+  spiTransferDuo(scanlimit, scanlimit);
+
+  char intensity[] = {0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1};
+  spiTransferDuo(intensity, intensity);
+
+  // Reset - turn off all lights
+  char matrix[] = { 
+    1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+  };
+  setLedMatrix(matrix);
+}
