@@ -1,8 +1,11 @@
-int waveA[93];
-int waveG[105];
-int waveF[118];
-int waveE[125];
-int waveD[140];
+int waveC4[157];
+int waveD4[140];
+int waveE4[125];
+int waveF4[118];
+int waveG4[105];
+int waveA4[93];
+int waveB4[83];
+
 
 #define PI 3.14159265358979323846
 
@@ -31,8 +34,16 @@ void generateSinWaves(void)
   double sum = 0.0;
   for (i = 0; i < 93; i++)
   {
-    waveA[i] = 127 * sin(sum);
+    waveA4[i] = 127 * sin(sum);
     sum = sum + (PI / 92); // array.length - 1
+  }
+
+  // Make B = 493,88 Hz
+  i = 0;
+  sum = 0.0;
+  for (i = 0; i < 83; i++) {
+    waveB4[i] = 127 * sin(sum);
+    sum = sum + (PI / 82);
   }
 
   // Make G = 391,995 Hz
@@ -40,7 +51,7 @@ void generateSinWaves(void)
   sum = 0.0;
   for (i = 0; i < 105; i++)
   {
-    waveG[i] = 127 * sin(sum);
+    waveG4[i] = 127 * sin(sum);
     sum = sum + (PI / 104);
   }
 
@@ -49,7 +60,7 @@ void generateSinWaves(void)
   sum = 0.0;
   for (i = 0; i < 118; i++)
   {
-    waveF[i] = 127 * sin(sum);
+    waveF4[i] = 127 * sin(sum);
     sum = sum + (PI / 117);
   }
 
@@ -58,7 +69,7 @@ void generateSinWaves(void)
   sum = 0.0;
   for (i = 0; i < 125; i++)
   {
-    waveE[i] = 127 * sin(sum);
+    waveE4[i] = 127 * sin(sum);
     sum = sum + (PI / 124);
   }
 
@@ -67,33 +78,51 @@ void generateSinWaves(void)
   sum = 0.0;
   for (i = 0; i < 140; i++)
   {
-    waveD[i] = 127 * sin(sum);
+    waveD4[i] = 127 * sin(sum);
     sum = sum + (PI / 139);
   }
-}
 
+  // Make C = 261,63 Hz
+  i = 0;
+  sum = 0.0;
+  for (i = 0; i < 157; i++) {
+    waveC4[i] = 127 * sin(sum);
+    sum = sum + (PI / 156);
+  }
+
+}
 
 int getAValue(int sample) {
   int index = sample % 93;
-  return waveA[index];
+  return waveA4[index];
 }
 
 int getGValue(int sample) {
   int index = sample % 105;
-  return waveG[index];
+  return waveG4[index];
 }
 
 int getFValue(int sample) {
   int index = sample % 118;
-  return waveF[index];
+  return waveF4[index];
 }
 
 int getEValue(int sample) {
   int index = sample % 125;
-  return waveE[index];
+  return waveE4[index];
 }
 
 int getDValue(int sample) {
   int index = sample % 140;
-  return waveD[index];
+  return waveD4[index];
+}
+
+int getCValue(int sample) {
+  int index = sample % 157;
+  return waveC4[index];
+}
+
+int getBValue(int sample) {
+  int index = sample % 83;
+  return waveB4[index];
 }

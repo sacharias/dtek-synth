@@ -63,10 +63,13 @@ void setupPlayButtons()
 {
   TRISDSET = 0xFFFF; // Sätter första till input
   TRISFSET = 0x8;    // prova med 8
+
+  // testa om skärmen fungerar
+  // TRISESET = 0xFFFF; 
+  // Man behöver inte sätta TRISE då den redan är input
 }
 
-int *getPlayButtons()
-{
+int *getPlayButtons() {
   // Pin 5
   int playButton1 = PORTD >> 1;
   playButton1 &= 0x1;
@@ -91,11 +94,9 @@ int *getPlayButtons()
   int playButton6 = PORTD >> 8;
   playButton6 &= 0x1;
 
-  // Fungerar inte än
-  // Pin 1
-  // int playButton7 = PORTF >> 2;
-  // playButton7 &= 0x1;
-  int playButton7 = 0;
+  // Pin 29
+  int playButton7 = PORTE >> 3;
+  playButton7 &= 0x1;
 
   int playButtonsValue = 0;
   playButtonsValue = playButton1 << 6;
@@ -109,6 +110,16 @@ int *getPlayButtons()
   return playButtonsValue;
 }
 
+int getbtns(){
+  int portD = PORTD >> 5;
+  portD &= 0x7;
+  return portD;
+}
+
+// int *getBoardButtons() {
+
+// }
+
 /* Interrupt Service Routine */
 void user_isr()
 {
@@ -116,47 +127,41 @@ void user_isr()
   int value = 0;
   int playButtonsValue = getPlayButtons();
 
-  // C finns inte än.
-  // if (playButtonsValue & 0x40) {
-  //     value += getCValue(sample);
-  //     n++;
-  // }
-  if (playButtonsValue & 0x20)
-  {
+  if (playButtonsValue & 0x40) {
+      value += getCValue(sample);
+      n++;
+  }
+
+  if (playButtonsValue & 0x20) {
     PORTESET = 0x2;
     value += getDValue(sample);
     n++;
   }
 
-  if (playButtonsValue & 0x10)
-  {
+  if (playButtonsValue & 0x10) {
     value += getEValue(sample);
     n++;
   }
 
-  if (playButtonsValue & 0x8)
-  {
+  if (playButtonsValue & 0x8) {
     value += getFValue(sample);
     n++;
   }
 
-  if (playButtonsValue & 0x4)
-  {
+  if (playButtonsValue & 0x4) {
     value += getGValue(sample);
     n++;
   }
 
-  if (playButtonsValue & 0x2)
-  {
+  if (playButtonsValue & 0x2) {
     value += getAValue(sample);
     n++;
   }
 
-  // B finns inte än.
-  // if (playButtonsValue & 0x1) {
-  //   value += getBValue(sample);
-  //   n++;
-  // }
+  if (playButtonsValue & 0x1) {
+    value += getBValue(sample);
+    n++;
+  }
 
   if (n == 0) {
     OC1RS = 0;
@@ -300,7 +305,7 @@ void initLamps() {
   setLedMatrix(zeros);
 }
 
-void fallingStock() {
+void waveShow() {
   while (1) {
     int del = 150000;
     char matrix[128];
@@ -358,50 +363,7 @@ void fallingStock() {
     }
     setLedMatrix(matrix);
   }
-
-  // int fillFrom = 0;
-  // int i;
-  // for (i = 0; i < 8; i++) {
-  //   char matrix[128];
-  //   int k;
-  //   for (k = 0; i < 128; k++) {
-  //     matrix[k] = 1;
-  //   }
-  //   // int j = fillFrom;
-  //   // for (j; j < 16; i++) {
-  //   //   matrix[j] = 1;
-  //   // }
-  //   setLedMatrix(matrix);
-  //   quicksleep(1000000);
-  //   // fillFrom += 16;
-  //   // if (fillFrom >= 112) {
-  //   //   fillFrom = 0;
-  //   // }
-  // }
 }
-  // char matrix[] = { 
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0,
-  //                 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-  //                 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
-  //                 };
-  // setLedMatrix(matrix);
-  
-  // char matrix2[] = { 
-  //                 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
-  //                 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0,
-  //                 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0,
-  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-  //                 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
-  // };
-  // setLedMatrix(matrix2);
 
 /* Lab-specific initialization goes here */
 void labinit() {
@@ -440,22 +402,24 @@ void labinit() {
 
   initLamps();
 
-  char matrix[128] = { 
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-                  0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0,
-                  0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-                  0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
-                  };
-  setLedMatrix(matrix);
+  // char matrix[128] = { 
+  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  //                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  //                 };
+  // setLedMatrix(matrix);
 
-  fallingStock();
+  // waveShow();
 }
 
 /* This function is called repetitively from the main program */
 void labwork() {
   int portD = getPlayButtons();
+  int portD2 = getbtns();
+  display_debug(&portD2);
 }
