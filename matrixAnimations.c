@@ -2,6 +2,8 @@
 #include <pic32mx.h>
 #include "mipslab.h"
 
+
+
 void waveShow() {
   while (1) {
     int del = 150000;
