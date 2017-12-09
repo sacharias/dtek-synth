@@ -7,24 +7,25 @@
 int count = 0;
 int testVal = 0;
 int updateRate = 60; // per second
+int updateCount = 0;
 
 // Global Variables
 int sample = 0;
 int sampleMax = 411090;
-
-/* 
+int shouldMatrixUpdate = 1; // if 1, matrix will update
+/*
  * 0 = PLAY
  * 1 = WAVE
- * 2 = DECAY 
+ * 2 = DECAY
  */
 int mode = 0;
 
 /*
- * 0 = Octave 3
- * 1 = Octave 4 (Standard)
- * 2 = Octave 5
- */ 
-int octave = 1;
+ * 2 = Octave 2
+ * 3 = Octave 3 (Standard)
+ * 4 = Octave 4
+ */
+int octave = 4;
 
 /*
  * 0 = Sine
@@ -39,45 +40,46 @@ void updateSound() {
   int playButtonsValue = getPlayBtns();
 
   if (playButtonsValue & 0x40) {
-      value += getCValue(sample);
+      value += getCValue(sample, octave);
       n++;
   }
 
   if (playButtonsValue & 0x20) {
-    PORTESET = 0x2;
-    value += getDValue(sample);
+    value += getDValue(sample, octave);
     n++;
   }
 
   if (playButtonsValue & 0x10) {
-    value += getEValue(sample);
+    value += getEValue(sample, octave);
     n++;
   }
 
   if (playButtonsValue & 0x8) {
-    value += getFValue(sample);
+    value += getFValue(sample, octave);
     n++;
   }
 
   if (playButtonsValue & 0x4) {
-    value += getGValue(sample);
+    value += getGValue(sample, octave);
     n++;
   }
 
   if (playButtonsValue & 0x2) {
-    value += getAValue(sample);
+    value += getAValue(sample, octave);
     n++;
   }
 
   if (playButtonsValue & 0x1) {
-    value += getBValue(sample);
+    value += getBValue(sample,octave);
     n++;
   }
 
   if (n == 0) {
     OC1RS = 0;
+    shouldMatrixUpdate = 1;
   } else {
     OC1RS = (value / n) + 127;
+    shouldMatrixUpdate = 0;
   }
 
   sample++;
@@ -116,12 +118,53 @@ void labinit() {
   OC1CONSET = 0x8000; // Start PWM
 
   enable_interrupt();
-  generateSinWaves();
+  generateSinWaves(waveForm);
   setupPlayButtons();
 
   initLamps();
   // waveShow();
 }
 
+int waveIsClicked = 0;
+int octaveIsClicked = 0;
 /* This function is called repetitively from the main program */
-void labwork() {}
+void labwork() {
+  int boardButtons = getBoardBtns();
+  if(boardButtons & 0x4){
+    if(!waveIsClicked){
+      waveForm = waveForm + 1;
+      if(waveForm > 2){
+        waveForm = 0;
+      }
+      waveIsClicked = 1;
+      display_debug(&waveForm);
+      generateSinWaves(waveForm);
+
+    }
+  } else{
+    waveIsClicked = 0;
+  }
+
+  if(boardButtons & 0x2){
+     if(!octaveIsClicked){
+       octave = octave + 1;
+       if(octave > 4){
+         octave = 2;
+       }
+       octaveIsClicked = 1;
+       display_debug(&octave);
+     }
+   } else{
+      octaveIsClicked = 0;
+   }
+
+   if (updateCount >= 30000) {
+     if (shouldMatrixUpdate) {
+       matrixNext();
+     }
+     updateCount = 0;
+   } else {
+     updateCount++;
+   }
+
+}
