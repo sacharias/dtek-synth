@@ -2,6 +2,8 @@
 #include <pic32mx.h>
 #include "mipslab.h"
 
+int testCountMatrix = 0;
+
 void setCs(int high) {
   if (high) {
     PORTESET = 0x0004; // CS HIGH
@@ -27,7 +29,7 @@ void setClk(int high) {
 }
 
 void spiTransferDuo(char data1[], char data2[]) {
-  int sleepTime = 20;
+  int sleepTime = 40;
   setCs(0);
 
   int i;
@@ -55,17 +57,17 @@ void spiTransferDuo(char data1[], char data2[]) {
 
 void setLedMatrixHelper(char m[], int b1[], int b2[], char dCode[]) {
   char OneCol0[] = {
-    dCode[0], dCode[1], dCode[2], dCode[3], dCode[4], dCode[5], dCode[6], dCode[7], 
+    dCode[0], dCode[1], dCode[2], dCode[3], dCode[4], dCode[5], dCode[6], dCode[7],
     m[b1[0]], m[b1[1]], m[b1[2]], m[b1[3]], m[b1[4]], m[b1[5]], m[b1[6]], m[b1[7]]
   };
   char TwoCol0[] = {
-    dCode[0], dCode[1], dCode[2], dCode[3], dCode[4], dCode[5], dCode[6], dCode[7], 
+    dCode[0], dCode[1], dCode[2], dCode[3], dCode[4], dCode[5], dCode[6], dCode[7],
     m[b2[0]], m[b2[1]], m[b2[2]], m[b2[3]], m[b2[4]], m[b2[5]], m[b2[6]], m[b2[7]]
   };
   spiTransferDuo(OneCol0, TwoCol0);
 }
 
-void setLedMatrix(char m[]) { 
+void setLedMatrix(char m[]) {
   int b1[] = {112, 96, 80, 64, 48, 32, 16, 0};
   int b2[] = {120, 104, 88, 72, 56, 40, 24, 8};
 
@@ -141,7 +143,7 @@ void initLamps() {
   spiTransferDuo(intensity, intensity);
 
   // Reset - turn off all lights
-  char matrix[] = { 
+  char matrix[] = {
     0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
     1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
     0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0,
@@ -155,7 +157,7 @@ void initLamps() {
 }
 
 void testMatrixUpdate() {
-  char matrix[] = { 
+  char matrix[] = {
     1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -165,5 +167,22 @@ void testMatrixUpdate() {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
   };
+  setLedMatrix(matrix);
+}
+
+void matrixNext() {
+  char matrix[128];
+  int i;
+  for (i = 0; i < 128; i++) {
+    if (i < testCountMatrix) {
+      matrix[i] = 1;
+    } else {
+      matrix[i] = 0;
+    }
+  }
+  testCountMatrix++;
+  if (testCountMatrix == 128) {
+    testCountMatrix = 0;
+  }
   setLedMatrix(matrix);
 }
