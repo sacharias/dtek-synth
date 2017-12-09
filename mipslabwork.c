@@ -12,10 +12,10 @@ int updateRate = 60; // per second
 int sample = 0;
 int sampleMax = 411090;
 
-/* 
+/*
  * 0 = PLAY
  * 1 = WAVE
- * 2 = DECAY 
+ * ( 2 = DECAY )
  */
 int mode = 0;
 
@@ -23,7 +23,7 @@ int mode = 0;
  * 0 = Octave 3
  * 1 = Octave 4 (Standard)
  * 2 = Octave 5
- */ 
+ */
 int octave = 1;
 
 /*
@@ -120,8 +120,9 @@ void labinit() {
   setupPlayButtons();
 
   initLamps();
-  // waveShow();
 }
 
 /* This function is called repetitively from the main program */
-void labwork() {}
+void labwork() {
+  //waveShow();
+}
