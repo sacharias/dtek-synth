@@ -152,7 +152,7 @@ void labwork() {
 
    if (updateCount >= 30000) {
      if (shouldMatrixUpdate) {
-       matrixNext();
+       matrixNext(waveForm);
      }
      updateCount = 0;
    } else {

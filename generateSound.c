@@ -8,22 +8,22 @@ int waveA4[93];
 int waveB4[83];
 
 // octave 3 arrays
-int waveC3[157];
-int waveD3[140];
-int waveE3[125];
-int waveF3[118];
-int waveG3[105];
-int waveA3[93];
-int waveB3[83];
+int waveC3[314];
+int waveD3[280];
+int waveE3[250];
+int waveF3[236];
+int waveG3[210];
+int waveA3[186];
+int waveB3[166];
 
 // octave 2 arrays
-int waveC2[157];
-int waveD2[140];
-int waveE2[125];
-int waveF2[118];
-int waveG2[105];
-int waveA2[93];
-int waveB2[83];
+int waveC2[79];
+int waveD2[70];
+int waveE2[63];
+int waveF2[59];
+int waveG2[53];
+int waveA2[46];
+int waveB2[41];
 
 #define PI 3.14159265358979323846
 
@@ -89,212 +89,212 @@ void generateSinWaves(int waveType)
   if(waveType == 0){
 
       // Make A = 440 Hz
-      generateSin(sizeof(waveA4)/sizeof(int), &waveA4);
+      generateSin(sizeof(waveA4)/sizeof(int), waveA4);
 
       // Make B = 493,88 Hz
-      generateSin(sizeof(waveB4)/sizeof(int), &waveB4);
+      generateSin(sizeof(waveB4)/sizeof(int), waveB4);
 
       // Make G = 391,995 Hz
-      generateSin(sizeof(waveG4)/sizeof(int), &waveG4);
+      generateSin(sizeof(waveG4)/sizeof(int), waveG4);
 
       // Make F = 349,228 Hz
-      generateSin(sizeof(waveF4)/sizeof(int), &waveF4);
+      generateSin(sizeof(waveF4)/sizeof(int), waveF4);
 
       // Make E = 329,628 Hz
-      generateSin(sizeof(waveE4)/sizeof(int), &waveE4);
+      generateSin(sizeof(waveE4)/sizeof(int), waveE4);
 
       // Make D = 293,665 Hz
-      generateSin(sizeof(waveD4)/sizeof(int), &waveD4);
+      generateSin(sizeof(waveD4)/sizeof(int), waveD4);
 
       // Make C = 261,63 Hz
-      generateSin(sizeof(waveC4)/sizeof(int), &waveC4);
+      generateSin(sizeof(waveC4)/sizeof(int), waveC4);
 
 
         // GENERATE A3 OSV
 
       // Make A = 440 Hz
-      generateSin(sizeof(waveA3)/sizeof(int), &waveA3);
+      generateSin(sizeof(waveA3)/sizeof(int), waveA3);
 
       // Make B = 493,88 Hz
-      generateSin(sizeof(waveB3)/sizeof(int), &waveB3);
+      generateSin(sizeof(waveB3)/sizeof(int), waveB3);
 
       // Make G = 391,995 Hz
-      generateSin(sizeof(waveG3)/sizeof(int), &waveG3);
+      generateSin(sizeof(waveG3)/sizeof(int), waveG3);
 
       // Make F = 349,228 Hz
-      generateSin(sizeof(waveF3)/sizeof(int), &waveF3);
+      generateSin(sizeof(waveF3)/sizeof(int), waveF3);
 
       // Make E = 329,628 Hz
-      generateSin(sizeof(waveE3)/sizeof(int), &waveE3);
+      generateSin(sizeof(waveE3)/sizeof(int), waveE3);
 
       // Make D = 293,665 Hz
-      generateSin(sizeof(waveD3)/sizeof(int), &waveD3);
+      generateSin(sizeof(waveD3)/sizeof(int), waveD3);
 
       // Make C = 261,63 Hz
-      generateSin(sizeof(waveC3)/sizeof(int), &waveC3);
+      generateSin(sizeof(waveC3)/sizeof(int), waveC3);
 
 
 
       // GENERATE A2 OSV
       // Make A = 440 Hz
-      generateSin(sizeof(waveA2)/sizeof(int), &waveA2);
+      generateSin(sizeof(waveA2)/sizeof(int), waveA2);
 
       // Make B = 493,88 Hz
-      generateSin(sizeof(waveB2)/sizeof(int), &waveB2);
+      generateSin(sizeof(waveB2)/sizeof(int), waveB2);
 
       // Make G = 391,995 Hz
-      generateSin(sizeof(waveG2)/sizeof(int), &waveG2);
+      generateSin(sizeof(waveG2)/sizeof(int), waveG2);
 
       // Make F = 349,228 Hz
-      generateSin(sizeof(waveF2)/sizeof(int), &waveF2);
+      generateSin(sizeof(waveF2)/sizeof(int), waveF2);
 
       // Make E = 329,628 Hz
-      generateSin(sizeof(waveE2)/sizeof(int), &waveE2);
+      generateSin(sizeof(waveE2)/sizeof(int), waveE2);
 
       // Make D = 293,665 Hz
-      generateSin(sizeof(waveD2)/sizeof(int), &waveD2);
+      generateSin(sizeof(waveD2)/sizeof(int), waveD2);
 
       // Make C = 261,63 Hz
-      generateSin(sizeof(waveC2)/sizeof(int), &waveC2);
+      generateSin(sizeof(waveC2)/sizeof(int), waveC2);
 
   } else if(waveType == 1){
 
     // GENERATE A4 OSV
       // Make A = 440 Hz
-      generateBox(sizeof(waveA4)/sizeof(int), &waveA4);
+      generateBox(sizeof(waveA4)/sizeof(int), waveA4);
 
-      // Make B = 493,88 Hz
-      generateBox(sizeof(waveB4)/sizeof(int), &waveB4);
+      // Make B = 493,88 H
+      generateBox(sizeof(waveB4)/sizeof(int), waveB4);
 
       // Make G = 391,995 Hz
-      generateBox(sizeof(waveG4)/sizeof(int), &waveG4);
+      generateBox(sizeof(waveG4)/sizeof(int), waveG4);
 
       // Make F = 349,228 Hz
-      generateBox(sizeof(waveF4)/sizeof(int), &waveF4);
+      generateBox(sizeof(waveF4)/sizeof(int), waveF4);
 
       // Make E = 329,628 Hz
-      generateBox(sizeof(waveE4)/sizeof(int), &waveE4);
+      generateBox(sizeof(waveE4)/sizeof(int), waveE4);
 
       // Make D = 293,665 Hz
-      generateBox(sizeof(waveD4)/sizeof(int), &waveD4);
+      generateBox(sizeof(waveD4)/sizeof(int), waveD4);
 
       // Make C = 261,63 Hz
-      generateBox(sizeof(waveC4)/sizeof(int), &waveC4);
+      generateBox(sizeof(waveC4)/sizeof(int), waveC4);
 
 
       // GENERATE A3 OSV
         // Make A = 440 Hz
-        generateBox(sizeof(waveA3)/sizeof(int), &waveA3);
+        generateBox(sizeof(waveA3)/sizeof(int), waveA3);
 
         // Make B = 493,88 Hz
-        generateBox(sizeof(waveB3)/sizeof(int), &waveB3);
+        generateBox(sizeof(waveB3)/sizeof(int),waveB3);
 
         // Make G = 391,995 Hz
-        generateBox(sizeof(waveG3)/sizeof(int), &waveG3);
+        generateBox(sizeof(waveG3)/sizeof(int), waveG3);
 
         // Make F = 349,228 Hz
-        generateBox(sizeof(waveF3)/sizeof(int), &waveF3);
+        generateBox(sizeof(waveF3)/sizeof(int), waveF3);
 
         // Make E = 329,628 Hz
-        generateBox(sizeof(waveE3)/sizeof(int), &waveE3);
+        generateBox(sizeof(waveE3)/sizeof(int), waveE3);
 
         // Make D = 293,665 Hz
-        generateBox(sizeof(waveD3)/sizeof(int), &waveD3);
+        generateBox(sizeof(waveD3)/sizeof(int), waveD3);
 
         // Make C = 261,63 Hz
-        generateBox(sizeof(waveC3)/sizeof(int), &waveC3);
+        generateBox(sizeof(waveC3)/sizeof(int), waveC3);
 
 
         // GENERATE A2 OSV
           // Make A = 440 Hz
-          generateBox(sizeof(waveA2)/sizeof(int), &waveA2);
+          generateBox(sizeof(waveA2)/sizeof(int), waveA2);
 
           // Make B = 493,88 Hz
-          generateBox(sizeof(waveB2)/sizeof(int), &waveB2);
+          generateBox(sizeof(waveB2)/sizeof(int), waveB2);
 
           // Make G = 391,995 Hz
-          generateBox(sizeof(waveG2)/sizeof(int), &waveG2);
+          generateBox(sizeof(waveG2)/sizeof(int), waveG2);
 
           // Make F = 349,228 Hz
-          generateBox(sizeof(waveF2)/sizeof(int), &waveF2);
+          generateBox(sizeof(waveF2)/sizeof(int),waveF2);
 
           // Make E = 329,628 Hz
-          generateBox(sizeof(waveE2)/sizeof(int), &waveE2);
+          generateBox(sizeof(waveE2)/sizeof(int), waveE2);
 
           // Make D = 293,665 Hz
-          generateBox(sizeof(waveD2)/sizeof(int), &waveD2);
+          generateBox(sizeof(waveD2)/sizeof(int), waveD2);
 
           // Make C = 261,63 Hz
-          generateBox(sizeof(waveC2)/sizeof(int), &waveC2);
+          generateBox(sizeof(waveC2)/sizeof(int), waveC2);
 
 
   } else{
       // Make A = 440 Hz
-      generateTriangle(sizeof(waveA4)/sizeof(int), &waveA4);
+      generateTriangle(sizeof(waveA4)/sizeof(int), waveA4);
 
       // Make B = 493,88 Hz
-      generateTriangle(sizeof(waveB4)/sizeof(int), &waveB4);
+      generateTriangle(sizeof(waveB4)/sizeof(int), waveB4);
 
       // Make G = 391,995 Hz
-      generateTriangle(sizeof(waveG4)/sizeof(int), &waveG4);
+      generateTriangle(sizeof(waveG4)/sizeof(int), waveG4);
 
       // Make F = 349,228 Hz
-      generateTriangle(sizeof(waveF4)/sizeof(int), &waveF4);
+      generateTriangle(sizeof(waveF4)/sizeof(int), waveF4);
 
       // Make E = 329,628 Hz
-      generateTriangle(sizeof(waveE4)/sizeof(int), &waveE4);
+      generateTriangle(sizeof(waveE4)/sizeof(int), waveE4);
 
       // Make D = 293,665 Hz
-      generateTriangle(sizeof(waveD4)/sizeof(int), &waveD4);
+      generateTriangle(sizeof(waveD4)/sizeof(int), waveD4);
 
       // Make C = 261,63 Hz
-      generateTriangle(sizeof(waveC4)/sizeof(int), &waveC4);
+      generateTriangle(sizeof(waveC4)/sizeof(int), waveC4);
 
       // GENEREATE A3 OSV!
 
       // Make A = 440 Hz
-      generateTriangle(sizeof(waveA3)/sizeof(int), &waveA3);
+      generateTriangle(sizeof(waveA3)/sizeof(int), waveA3);
 
       // Make B = 493,88 Hz
-      generateTriangle(sizeof(waveB3)/sizeof(int), &waveB3);
+      generateTriangle(sizeof(waveB3)/sizeof(int), waveB3);
 
       // Make G = 391,995 Hz
-      generateTriangle(sizeof(waveG3)/sizeof(int), &waveG3);
+      generateTriangle(sizeof(waveG3)/sizeof(int), waveG3);
 
       // Make F = 349,228 Hz
-      generateTriangle(sizeof(waveF3)/sizeof(int), &waveF3);
+      generateTriangle(sizeof(waveF3)/sizeof(int), waveF3);
 
       // Make E = 329,628 Hz
-      generateTriangle(sizeof(waveE3)/sizeof(int), &waveE3);
+      generateTriangle(sizeof(waveE3)/sizeof(int), waveE3);
 
       // Make D = 293,665 Hz
-      generateTriangle(sizeof(waveD3)/sizeof(int), &waveD3);
+      generateTriangle(sizeof(waveD3)/sizeof(int), waveD3);
 
       // Make C = 261,63 Hz
-      generateTriangle(sizeof(waveC3)/sizeof(int), &waveC3);
+      generateTriangle(sizeof(waveC3)/sizeof(int), waveC3);
 
       // GENEREATE A2 OSV!
 
       // Make A = 440 Hz
-      generateTriangle(sizeof(waveA2)/sizeof(int), &waveA2);
+      generateTriangle(sizeof(waveA2)/sizeof(int), waveA2);
 
       // Make B = 493,88 Hz
-      generateTriangle(sizeof(waveB2)/sizeof(int), &waveB2);
+      generateTriangle(sizeof(waveB2)/sizeof(int), waveB2);
 
       // Make G = 391,995 Hz
-      generateTriangle(sizeof(waveG2)/sizeof(int), &waveG2);
+      generateTriangle(sizeof(waveG2)/sizeof(int), waveG2);
 
       // Make F = 349,228 Hz
-      generateTriangle(sizeof(waveF2)/sizeof(int), &waveF2);
+      generateTriangle(sizeof(waveF2)/sizeof(int), waveF2);
 
       // Make E = 329,628 Hz
-      generateTriangle(sizeof(waveE2)/sizeof(int), &waveE2);
+      generateTriangle(sizeof(waveE2)/sizeof(int), waveE2);
 
       // Make D = 293,665 Hz
-      generateTriangle(sizeof(waveD2)/sizeof(int), &waveD2);
+      generateTriangle(sizeof(waveD2)/sizeof(int), waveD2);
 
       // Make C = 261,63 Hz
-      generateTriangle(sizeof(waveC2)/sizeof(int), &waveC2);
+      generateTriangle(sizeof(waveC2)/sizeof(int), waveC2);
   }
 }
 

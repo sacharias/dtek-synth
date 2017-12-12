@@ -201,6 +201,86 @@ void sinusAnimationRow() {
 
 }
 
+void sawAnimationRow(){
+  char row1[] = {0, 0, 0, 0, 0, 0, 0, 1};
+  char row2[] = {0, 0, 0, 0, 0, 0, 1, 1};
+  char row3[] = {0, 0, 0, 0, 0, 1, 0, 1};
+  char row4[] = {0, 0, 0, 0, 1, 0, 0, 1};
+  char row5[] = {0, 0, 0, 1, 0, 0, 0, 1};
+  char row6[] = {0, 0, 1, 0, 0, 0, 0, 1};
+  char row7[] = {0, 1, 0, 0, 0, 0, 0, 1};
+  char row8[] = {1, 0, 0, 0, 0, 0, 0, 1};
+
+  char matrix[128];
+  int i;
+
+  int b[] = {112, 96, 80, 64, 48, 32, 16, 0};
+
+  for (i = 0; i < 16; i++) {
+    int place = (start + i) % 8;
+    matrix[b[7] + i] = row1[place];
+    matrix[b[6] + i] = row2[place];
+    matrix[b[5] + i] = row3[place];
+    matrix[b[4] + i] = row4[place];
+    matrix[b[3] + i] = row5[place];
+    matrix[b[2] + i] = row6[place];
+    matrix[b[1] + i] = row7[place];
+    matrix[b[0] + i] = row8[place];
+  }
+
+  // for (i = 0; i < 128; i++) {
+  //   if (i < testCountMatrix) {
+  //     matrix[i] = 1;
+  //   } else {
+  //     matrix[i] = 0;
+  //   }
+  // }
+
+  start++;
+
+  setLedMatrix(matrix);
+}
+
+
+void boxAnimationRow(){
+  char row1[] = {1, 1, 1, 1, 1, 0, 0, 0};
+  char row2[] = {1, 0, 0, 0, 1, 0, 0, 0};
+  char row3[] = {1, 0, 0, 0, 1, 0, 0, 0};
+  char row4[] = {1, 0, 0, 0, 1, 0, 0, 0};
+  char row5[] = {1, 0, 0, 0, 1, 0, 0, 0};
+  char row6[] = {1, 0, 0, 0, 1, 0, 0, 0};
+  char row7[] = {1, 0, 0, 0, 1, 0, 0, 0};
+  char row8[] = {1, 0, 0, 0, 1, 1, 1, 1};
+
+  char matrix[128];
+  int i;
+
+  int b[] = {112, 96, 80, 64, 48, 32, 16, 0};
+
+  for (i = 0; i < 16; i++) {
+    int place = (start + i) % 8;
+    matrix[b[7] + i] = row1[place];
+    matrix[b[6] + i] = row2[place];
+    matrix[b[5] + i] = row3[place];
+    matrix[b[4] + i] = row4[place];
+    matrix[b[3] + i] = row5[place];
+    matrix[b[2] + i] = row6[place];
+    matrix[b[1] + i] = row7[place];
+    matrix[b[0] + i] = row8[place];
+  }
+
+  // for (i = 0; i < 128; i++) {
+  //   if (i < testCountMatrix) {
+  //     matrix[i] = 1;
+  //   } else {
+  //     matrix[i] = 0;
+  //   }
+  // }
+
+  start++;
+
+  setLedMatrix(matrix);
+}
 
 void testMatrixUpdate() {
   char matrix[] = {
@@ -216,23 +296,26 @@ void testMatrixUpdate() {
   setLedMatrix(matrix);
 }
 
-void matrixNext() {
+void matrixNext(int mode) {
 
-  // char matrix[128];
-  // int i;
-  // for (i = 0; i < 128; i++) {
-  //   if (i < testCountMatrix) {
-  //     matrix[i] = 1;
-  //   } else {
-  //     matrix[i] = 0;
-  //   }
-  // }
-
-  testCountMatrix++;
-  if (testCountMatrix == 128) {
-    testCountMatrix = 0;
+  if(mode == 0){
+    testCountMatrix++;
+    if (testCountMatrix == 128) {
+      testCountMatrix = 0;
+    }
+    sinusAnimationRow();
+  } else if(mode == 1){
+    testCountMatrix++;
+    if (testCountMatrix == 128) {
+      testCountMatrix = 0;
+    }
+    sawAnimationRow();
+  } else{
+    testCountMatrix++;
+    if (testCountMatrix == 128) {
+      testCountMatrix = 0;
+    }
+    boxAnimationRow();
   }
-  sinusAnimationRow();
-  //
-  // setLedMatrix(matrix);
+
 }
