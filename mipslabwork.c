@@ -3,22 +3,12 @@
 #include "mipslab.h" /* Declatations for these labs */
 #include "generateSound.h"
 
-// Testing Variables
-int count = 0;
-int testVal = 0;
-int updateRate = 60; // per second
 int updateCount = 0;
 
 // Global Variables
 int sample = 0;
 int sampleMax = 411090;
-int shouldMatrixUpdate = 1; // if 1, matrix will update
-/*
- * 0 = PLAY
- * 1 = WAVE
- * 2 = DECAY
- */
-int mode = 0;
+int shouldMatrixUpdate = 1;
 
 /*
  * 2 = Octave 2
@@ -34,6 +24,7 @@ int octave = 4;
  */
 int waveForm = 0;
 
+// get the playbutton values and update the sound value
 void updateSound() {
   int n = 0;
   int value = 0;
@@ -124,8 +115,10 @@ void labinit() {
   initLamps();
 }
 
+// Simple booleans
 int waveIsClicked = 0;
 int octaveIsClicked = 0;
+
 /* This function is called repetitively from the main program */
 void labwork() {
   int boardButtons = getBoardBtns();

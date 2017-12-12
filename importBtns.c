@@ -2,17 +2,20 @@
 #include <pic32mx.h>
 #include "mipslab.h"
 
+// Setup play buttons on register F and D
 void setupPlayButtons() {
   TRISDSET = 0xFFFF;
   TRISFSET = 0x8;
 }
 
+// get the board button values.
 int getBoardBtns() {
   int portD = PORTD >> 5;
   portD &= 0x7;
   return portD;
 }
 
+// get the board button values.
 int getPlayBtns() {
   // Pin 5
   int playButton1 = PORTD >> 1;

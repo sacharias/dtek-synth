@@ -1,3 +1,4 @@
+// Octave 4 arrays
 int waveC4[157];
 int waveD4[140];
 int waveE4[125];
@@ -6,6 +7,7 @@ int waveG4[105];
 int waveA4[93];
 int waveB4[83];
 
+// octave 3 arrays
 int waveC3[157];
 int waveD3[140];
 int waveE3[125];
@@ -14,6 +16,7 @@ int waveG3[105];
 int waveA3[93];
 int waveB3[83];
 
+// octave 2 arrays
 int waveC2[157];
 int waveD2[140];
 int waveE2[125];
@@ -24,6 +27,7 @@ int waveB2[83];
 
 #define PI 3.14159265358979323846
 
+// our own sinus function :)
 double sin(double x)
 {
   int n = 1;
@@ -37,6 +41,7 @@ double sin(double x)
   return sin;
 }
 
+// genereate a sin wave into the array 'wave'
 void generateSin(int length, int* wave){
   int i = 0;
   double sum = 0.0;
@@ -48,6 +53,7 @@ void generateSin(int length, int* wave){
   }
 }
 
+// Genereate a box wave into the array 'wave'
 void generateBox(int length, int* wave){
   int i = 0;
 
@@ -61,6 +67,7 @@ void generateBox(int length, int* wave){
   }
 }
 
+// Genereate a triangle wave into the array 'wave'
 void generateTriangle(int length, int* wave){
   int i = 0;
   double sum = 0;
@@ -73,7 +80,7 @@ void generateTriangle(int length, int* wave){
 }
 
 
-
+// Genereate sinwawes based on wavetype. 0 is sinus, 1 is box and 2 is triangle
 void generateSinWaves(int waveType)
 {
   // Make waveX arrays
@@ -292,7 +299,7 @@ void generateSinWaves(int waveType)
 }
 
 
-
+// get value based on sample and what kind of octave(wave) (2, 3 or 4)
 int getAValue(int sample, int wave) {
   if(wave == 4){
     int index = sample % (sizeof(waveA4)/sizeof(int));
@@ -306,6 +313,7 @@ int getAValue(int sample, int wave) {
   }
 }
 
+// get value based on sample and what kind of octave(wave) (2, 3 or 4)
 int getGValue(int sample, int wave) {
   if(wave == 4){
     int index = sample % (sizeof(waveG4)/sizeof(int));
@@ -319,6 +327,7 @@ int getGValue(int sample, int wave) {
   }
 }
 
+// get value based on sample and what kind of octave(wave) (2, 3 or 4)
 int getFValue(int sample, int wave) {
   if(wave == 4){
     int index = sample % (sizeof(waveF4)/sizeof(int));
@@ -332,6 +341,7 @@ int getFValue(int sample, int wave) {
   }
 }
 
+// get value based on sample and what kind of octave(wave) (2, 3 or 4)
 int getEValue(int sample, int wave) {
   if(wave == 4){
     int index = sample % (sizeof(waveE4)/sizeof(int));
@@ -346,6 +356,7 @@ int getEValue(int sample, int wave) {
   }
 }
 
+// get value based on sample and what kind of octave(wave) (2, 3 or 4)
 int getDValue(int sample, int wave) {
   if(wave == 4){
     int index = sample % (sizeof(waveD4)/sizeof(int));
@@ -359,6 +370,7 @@ int getDValue(int sample, int wave) {
   }
 }
 
+// get value based on sample and what kind of octave(wave) (2, 3 or 4)
 int getCValue(int sample, int wave) {
   if(wave == 4){
     int index = sample % (sizeof(waveC4)/sizeof(int));
@@ -373,6 +385,7 @@ int getCValue(int sample, int wave) {
 
 }
 
+// get value based on sample and what kind of octave(wave) (2, 3 or 4)
 int getBValue(int sample, int wave) {
   if(wave == 4){
     int index = sample % (sizeof(waveB4)/sizeof(int));
